@@ -18,26 +18,24 @@ int Cmain::main(){
     if( !init() )
 	{
 		printf( "Failed to initialize!\n" );
+		return 0;
 	}
-	else
+	
+	//Load media
+	if( !loadMedia() )
 	{
-		//Load media
-		if( !loadMedia() )
-		{
-			printf( "Failed to load media!\n" );
-		}
-		else
-		{
-			//Apply the image
-			SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
-			
-			//Update the surface
-			SDL_UpdateWindowSurface( window );
-
-			//Wait two seconds
-			SDL_Delay( 2000 );
-		}
+		printf( "Failed to load media!\n" );
+		return 0;
 	}
+	
+	//Apply the image
+	SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
+	
+	//Update the surface
+	SDL_UpdateWindowSurface( window );
+
+	SDL_Delay( 2000 );
+	
 
 }
 
