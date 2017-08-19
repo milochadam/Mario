@@ -40,4 +40,7 @@ int Cmain::main(){
 			SDL_Delay( 2000 );
 		}
 	}
+void Cmain::freeSurface(SDL_Surface* s) {
+	SDL_FreeSurface( s );
+	s = NULL;
 }

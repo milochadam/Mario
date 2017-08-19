@@ -8,5 +8,7 @@ private:
 public:
     Cmain();
     int main();
-    ~Cmain();
+private:
+    void freeSurface(SDL_Surface* );
+
 };
