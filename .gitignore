@@ -34,3 +34,5 @@ build/Makefile
 build/CMakeFiles/Progress/count.txt
 build/CMakeFiles/Progress/1
 build/CMakeFiles/mario.dir/home/chom/programming/c++/mario/src/Cmain.cpp.o
+.vscode/c_cpp_properties.json
+.vscode/settings.json
