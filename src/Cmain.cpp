@@ -1,37 +1,35 @@
 #include "../include/Cmain.h"
-
+#include <iostream>
 Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
     window = NULL;
-    screenSurface = NULL;
+	screenSurface = NULL;
+	
+	helloWorld=NULL;
 }
+
 Cmain::~Cmain(){
-    //Destroy window
+	freeSurface(helloWorld);
+	
 	SDL_DestroyWindow( window );
-    
-    //Quit SDL subsystems
     SDL_Quit();
 }
 
 int Cmain::main(){
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    if( !init() )
 	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+		printf( "Failed to initialize!\n" );
 	}
 	else
 	{
-		//Create window
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL )
+		//Load media
+		if( !loadMedia() )
 		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+			printf( "Failed to load media!\n" );
 		}
 		else
 		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
-
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+			//Apply the image
+			SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
 			
 			//Update the surface
 			SDL_UpdateWindowSurface( window );
@@ -40,6 +38,42 @@ int Cmain::main(){
 			SDL_Delay( 2000 );
 		}
 	}
+
+}
+
+bool Cmain::init(){
+	bool success = true;
+
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
+		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+		success = false;
+	} else {
+		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		if( window == NULL ) {
+			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+			success = false;
+		} else {
+			//Get window surface
+			screenSurface = SDL_GetWindowSurface( window );
+		}
+	}
+	return success;
+}
+
+bool Cmain::loadMedia() {
+	bool success = true;
+
+	helloWorld = SDL_LoadBMP( "../../res/hello_world.bmp" );
+	if( helloWorld == NULL ) {
+		std::cin.get();
+		printf( "Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError() );
+		std::cin.get();
+		success = false;
+	}
+
+	return success;
+}
+
 void Cmain::freeSurface(SDL_Surface* s) {
 	SDL_FreeSurface( s );
 	s = NULL;
