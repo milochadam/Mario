@@ -73,14 +73,7 @@ int Cmain::main(){
 				}
 			}
 		}
-
-		//Apply the current image
 		SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
-
-		//Apply the image
-		//SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
-	
-		//Update the surface
 		SDL_UpdateWindowSurface( window );
 	}
 
