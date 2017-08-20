@@ -5,6 +5,12 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 	screenSurface = NULL;
 	
 	helloWorld=NULL;
+	exitImage=NULL;
+	currentSurface=NULL;
+
+	for(int i=0;i<KB_TOTAL;i++) {
+		kbSurfaces[i]=NULL;
+	}
 }
 
 Cmain::~Cmain(){
@@ -29,19 +35,47 @@ int Cmain::main(){
 	
 	bool quit = false;
 
-	
+	currentSurface=kbSurfaces[KB_DEFAULT];
+	// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
+	// SDL_UpdateWindowSurface( window );
+
 	while( !quit ) {
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 ) {
 			//User requests quit
-			if( e.type == SDL_QUIT )
-			{
+			if( e.type == SDL_QUIT ) {
 				quit = true;
+			} else if( e.type == SDL_KEYDOWN ) {
+				//Select surfaces based on key press
+				switch( e.key.keysym.sym ) {
+					case SDLK_UP:
+					currentSurface = kbSurfaces[ KB_UP ];
+					break;
+
+					case SDLK_DOWN:
+					currentSurface = kbSurfaces[ KB_DOWN ];
+					break;
+
+					case SDLK_LEFT:
+					currentSurface = kbSurfaces[ KB_LEFT ];
+					break;
+
+					case SDLK_RIGHT:
+					currentSurface = kbSurfaces[ KB_RIGHT ];
+					break;
+
+					default:
+					currentSurface = kbSurfaces[ KB_DEFAULT ];
+					break;
+				}
 			}
 		}
 
+		//Apply the current image
+		SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
+
 		//Apply the image
-		SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
+		//SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
 	
 		//Update the surface
 		SDL_UpdateWindowSurface( window );

@@ -9,6 +9,7 @@ private:
 
     SDL_Surface* helloWorld;
     SDL_Surface* exitImage;
+    SDL_Surface* currentSurface;
 
     SDL_Event e;
     enum KeyPressSurfaces {
