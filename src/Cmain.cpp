@@ -37,8 +37,6 @@ int Cmain::main(){
 	bool quit = false;
 
 	currentSurface=kbSurfaces[KB_DEFAULT];
-	// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
-	// SDL_UpdateWindowSurface( window );
 
 	while( !quit ) {
 		//Handle events on queue
@@ -63,6 +61,10 @@ int Cmain::main(){
 
 					case SDLK_RIGHT:
 					currentSurface = kbSurfaces[ KB_RIGHT ];
+					break;
+
+					case SDLK_p:
+					currentSurface = pngSurface;
 					break;
 
 					default:
@@ -129,9 +131,9 @@ bool Cmain::loadMedia() {
 		success = false;
 	}
 	//TODO: png surface
-	pngSurface = loadSurface( "../../res/x.bmp" );
+	pngSurface = loadSurface( "../../res/loaded.png" );
 	if( exitImage == NULL ) {
-		printf( "Failed to load exitImage image!\n" );
+		printf( "Failed to load png image!\n" );
 		success = false;
 	}
 	//Load default surface
