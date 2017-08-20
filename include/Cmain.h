@@ -7,6 +7,9 @@ private:
     SDL_Surface* screenSurface;
 
     SDL_Surface* helloWorld;
+    SDL_Surface* exitImage;
+
+    SDL_Event e;
 public:
     Cmain();
     ~Cmain();

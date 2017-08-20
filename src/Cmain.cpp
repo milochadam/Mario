@@ -9,6 +9,7 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 
 Cmain::~Cmain(){
 	freeSurface(helloWorld);
+	freeSurface(exitImage);
 	
 	SDL_DestroyWindow( window );
     SDL_Quit();
@@ -28,13 +29,30 @@ int Cmain::main(){
 		return 0;
 	}
 	
-	//Apply the image
-	SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
+	bool quit = false;
 	
-	//Update the surface
-	SDL_UpdateWindowSurface( window );
-
-	SDL_Delay( 2000 );
+				//Event handler
+				
+	
+				//While application is running
+				while( !quit )
+				{
+					//Handle events on queue
+					while( SDL_PollEvent( &e ) != 0 )
+					{
+						//User requests quit
+						if( e.type == SDL_QUIT )
+						{
+							quit = true;
+						}
+					}
+	
+					//Apply the image
+					SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
+				
+					//Update the surface
+					SDL_UpdateWindowSurface( window );
+				}
 	
 
 }
@@ -68,6 +86,14 @@ bool Cmain::loadMedia() {
 		std::cin.get();
 		success = false;
 	}
+	exitImage = SDL_LoadBMP( "../../res/x.bmp" );
+	if( exitImage == NULL ) {
+		std::cin.get();
+		printf( "Unable to load image %s! SDL Error: %s\n", "x.bmp", SDL_GetError() );
+		std::cin.get();
+		success = false;
+	}
+
 
 	return success;
 }
