@@ -11,6 +11,15 @@ private:
     SDL_Surface* exitImage;
 
     SDL_Event e;
+    enum KeyPressSurfaces {
+        KB_DEFAULT,
+        KB_UP,
+        KB_DOWN,
+        KB_LEFT,
+        KB_RIGHT,
+        KB_TOTAL
+    };
+    SDL_Surface* kbSurfaces[KB_TOTAL];
 public:
     Cmain();
     ~Cmain();

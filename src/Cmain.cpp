@@ -28,25 +28,25 @@ int Cmain::main(){
 	}
 	
 	bool quit = false;
+
 	
-				
 	while( !quit ) {
-					//Handle events on queue
+		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 ) {
-						//User requests quit
-						if( e.type == SDL_QUIT )
-						{
-							quit = true;
-						}
-					}
+			//User requests quit
+			if( e.type == SDL_QUIT )
+			{
+				quit = true;
+			}
+		}
+
+		//Apply the image
+		SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
 	
-					//Apply the image
-					SDL_BlitSurface( exitImage, NULL, screenSurface, NULL );
-				
-					//Update the surface
-					SDL_UpdateWindowSurface( window );
-				}
-	
+		//Update the surface
+		SDL_UpdateWindowSurface( window );
+	}
+
 
 }
 
@@ -82,15 +82,26 @@ bool Cmain::loadMedia() {
 		printf( "Unable to load image %s! SDL Error: %s\n", "x.bmp", SDL_GetError() );
 		success = false;
 	}
+	//Load default surface
+	kbSurfaces[ KB_DEFAULT ] = loadSurface( "../../res/press.bmp" );
+	if( kbSurfaces[ KB_DEFAULT ] == NULL ) {
+		printf( "Failed to load default image!\n" );
+		success = false;
+	}
 
+	//Load up surface
+	kbSurfaces[ KB_UP ] = loadSurface( "../../res/up.bmp" );
+	if( kbSurfaces[ KB_UP ] == NULL ) {
+		printf( "Failed to load up image!\n" );
+		success = false;
+	}
 
-	return success;
-}
-
-void Cmain::freeSurface(SDL_Surface* s) {
-	SDL_FreeSurface( s );
-	s = NULL;
-}
+	//Load down surface
+	kbSurfaces[ KB_DOWN ] = loadSurface( "../../res/down.bmp" );
+	if( kbSurfaces[ KB_DOWN ] == NULL ) {
+		printf( "Failed to load down image!\n" );
+		success = false;
+	}
 
 	//Load left surface
 	kbSurfaces[ KB_LEFT ] = loadSurface( "../../res/left.bmp" );
