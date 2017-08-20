@@ -31,4 +31,5 @@ public:
 private:
     SDL_Surface* loadSurface(std::string path);
     void freeSurface(SDL_Surface* );
+    void stretch(SDL_Surface* );
 };

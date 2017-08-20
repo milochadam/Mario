@@ -177,4 +177,11 @@ SDL_Surface* Cmain::loadSurface( std::string path ) {
 	return optimizedSurface;
 }
 
+void Cmain::stretch(SDL_Surface* s) {
+	SDL_Rect stretchRect;
+	stretchRect.x = 0;
+	stretchRect.y = 0;
+	stretchRect.w = SCREEN_WIDTH;
+	stretchRect.h = SCREEN_HEIGHT;
+	SDL_BlitScaled( s, NULL, screenSurface, &stretchRect );
 }
