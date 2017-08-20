@@ -160,9 +160,21 @@ void Cmain::freeSurface(SDL_Surface* s) {
 }
 
 SDL_Surface* Cmain::loadSurface( std::string path ) {
+	SDL_Surface* optimizedSurface = NULL;
 	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
 	if( loadedSurface == NULL ) {
 		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		return NULL;
 	}
-	return loadedSurface;
+
+	optimizedSurface = SDL_ConvertSurface( loadedSurface, screenSurface->format, 0 );
+	if( optimizedSurface == NULL ){
+		printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		return NULL;
+	}
+
+	SDL_FreeSurface( loadedSurface );
+	return optimizedSurface;
+}
+
 }
