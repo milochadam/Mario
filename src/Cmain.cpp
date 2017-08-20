@@ -106,14 +106,14 @@ bool Cmain::init(){
 bool Cmain::loadMedia() {
 	bool success = true;
 
-	helloWorld = SDL_LoadBMP( "../../res/hello_world.bmp" );
+	helloWorld = loadSurface( "../../res/hello_world.bmp" );
 	if( helloWorld == NULL ) {
-		printf( "Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError() );
+		printf( "Failed to load helloWorld image!\n" );
 		success = false;
 	}
-	exitImage = SDL_LoadBMP( "../../res/x.bmp" );
+	exitImage = loadSurface( "../../res/x.bmp" );
 	if( exitImage == NULL ) {
-		printf( "Unable to load image %s! SDL Error: %s\n", "x.bmp", SDL_GetError() );
+		printf( "Failed to load exitImage image!\n" );
 		success = false;
 	}
 	//Load default surface
