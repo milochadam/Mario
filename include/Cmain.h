@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <string>
 class Cmain {
 private:
@@ -10,6 +11,7 @@ private:
     SDL_Surface* helloWorld;
     SDL_Surface* exitImage;
     SDL_Surface* currentSurface;
+    SDL_Surface* pngSurface;
 
     SDL_Event e;
     enum KeyPressSurfaces {

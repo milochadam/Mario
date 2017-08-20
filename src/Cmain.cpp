@@ -7,6 +7,7 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 	helloWorld=NULL;
 	exitImage=NULL;
 	currentSurface=NULL;
+	pngSurface=NULL;
 
 	for(int i=0;i<KB_TOTAL;i++) {
 		kbSurfaces[i]=NULL;
@@ -85,22 +86,33 @@ int Cmain::main(){
 }
 
 bool Cmain::init(){
-	bool success = true;
+	/**
+	 * initializing: 
+	 * success = true
+	 *  failure = false
+	 */
 
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-		success = false;
-	} else {
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL ) {
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-			success = false;
-		} else {
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
-		}
+		return false;
 	}
-	return success;
+	window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+	if( window == NULL ) {
+		printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+		return false;
+	}
+	
+	//Initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if( !( IMG_Init( imgFlags ) & imgFlags ) ) {
+		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+		return false;
+	}
+	
+	//Get window surface
+	screenSurface = SDL_GetWindowSurface( window );
+
+	return true;
 }
 
 bool Cmain::loadMedia() {
@@ -112,6 +124,12 @@ bool Cmain::loadMedia() {
 		success = false;
 	}
 	exitImage = loadSurface( "../../res/x.bmp" );
+	if( exitImage == NULL ) {
+		printf( "Failed to load exitImage image!\n" );
+		success = false;
+	}
+	//TODO: png surface
+	pngSurface = loadSurface( "../../res/x.bmp" );
 	if( exitImage == NULL ) {
 		printf( "Failed to load exitImage image!\n" );
 		success = false;
@@ -168,7 +186,7 @@ SDL_Surface* Cmain::loadSurface( std::string path ) {
 	}
 
 	optimizedSurface = SDL_ConvertSurface( loadedSurface, screenSurface->format, 0 );
-	if( optimizedSurface == NULL ){
+	if( optimizedSurface == NULL ) {
 		printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
 		return NULL;
 	}
