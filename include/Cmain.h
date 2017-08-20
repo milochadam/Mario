@@ -17,8 +17,8 @@ public:
     bool init();
     bool loadMedia();
     int main();
+    
 private:
     SDL_Surface* loadSurface(std::string path);
     void freeSurface(SDL_Surface* );
-
 };

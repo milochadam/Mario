@@ -16,30 +16,23 @@ Cmain::~Cmain(){
 }
 
 int Cmain::main(){
-    if( !init() )
-	{
+    if( !init() ) {
 		printf( "Failed to initialize!\n" );
 		return 0;
 	}
 	
 	//Load media
-	if( !loadMedia() )
-	{
+	if( !loadMedia() ) {
 		printf( "Failed to load media!\n" );
 		return 0;
 	}
 	
 	bool quit = false;
 	
-				//Event handler
 				
-	
-				//While application is running
-				while( !quit )
-				{
+	while( !quit ) {
 					//Handle events on queue
-					while( SDL_PollEvent( &e ) != 0 )
-					{
+		while( SDL_PollEvent( &e ) != 0 ) {
 						//User requests quit
 						if( e.type == SDL_QUIT )
 						{
@@ -81,16 +74,12 @@ bool Cmain::loadMedia() {
 
 	helloWorld = SDL_LoadBMP( "../../res/hello_world.bmp" );
 	if( helloWorld == NULL ) {
-		std::cin.get();
 		printf( "Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError() );
-		std::cin.get();
 		success = false;
 	}
 	exitImage = SDL_LoadBMP( "../../res/x.bmp" );
 	if( exitImage == NULL ) {
-		std::cin.get();
 		printf( "Unable to load image %s! SDL Error: %s\n", "x.bmp", SDL_GetError() );
-		std::cin.get();
 		success = false;
 	}
 
