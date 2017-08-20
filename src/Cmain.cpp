@@ -102,3 +102,33 @@ void Cmain::freeSurface(SDL_Surface* s) {
 	SDL_FreeSurface( s );
 	s = NULL;
 }
+
+	//Load left surface
+	kbSurfaces[ KB_LEFT ] = loadSurface( "../../res/left.bmp" );
+	if( kbSurfaces[ KB_LEFT ] == NULL ) {
+		printf( "Failed to load left image!\n" );
+		success = false;
+	}
+
+	//Load right surface
+	kbSurfaces[ KB_RIGHT ] = loadSurface( "../../res/right.bmp" );
+	if( kbSurfaces[ KB_RIGHT ] == NULL ) {
+		printf( "Failed to load right image!\n" );
+		success = false;
+	}
+
+	return success;
+}
+
+void Cmain::freeSurface(SDL_Surface* s) {
+	SDL_FreeSurface( s );
+	s = NULL;
+}
+
+SDL_Surface* Cmain::loadSurface( std::string path ) {
+	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+	if( loadedSurface == NULL ) {
+		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+	return loadedSurface;
+}

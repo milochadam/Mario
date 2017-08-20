@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <string>
 class Cmain {
 private:
     const int SCREEN_WIDTH;
@@ -17,6 +18,7 @@ public:
     bool loadMedia();
     int main();
 private:
+    SDL_Surface* loadSurface(std::string path);
     void freeSurface(SDL_Surface* );
 
 };
