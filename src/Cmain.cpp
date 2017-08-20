@@ -108,7 +108,7 @@ bool Cmain::init(){
 		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
 		return false;
 	}
-	
+
 	//Get window surface
 	screenSurface = SDL_GetWindowSurface( window );
 
@@ -179,9 +179,9 @@ void Cmain::freeSurface(SDL_Surface* s) {
 
 SDL_Surface* Cmain::loadSurface( std::string path ) {
 	SDL_Surface* optimizedSurface = NULL;
-	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL ) {
-		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError() );
 		return NULL;
 	}
 
