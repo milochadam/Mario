@@ -18,9 +18,6 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 }
 
 Cmain::~Cmain(){
-	// Prawdopodobnie niepotrzebne zwalnianie, bo screenSurface to tylko wskaźnik na jeden z wczytanych obrazków
-	//freeSurface(screenSurface);
-
 	freeSurface(helloWorld);
 	freeSurface(exitImage);
 	freeSurface(pngSurface);
@@ -95,21 +92,7 @@ int Cmain::main(){
 				}
 			}
 		}
-
-		// SDL_RenderClear( renderer );
-		// SDL_RenderCopy( renderer, texture, NULL, NULL );
-		// SDL_RenderPresent( renderer );
-		/**
-		 *  08 - Tutorial test
-		 */
-		//example_08();
 		example_09();
-
-		/**
-		 * Jeszcze sprzed renderera
-		 */
-		// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL 332);
-		// SDL_UpdateWindowSurface( window );
 	}
 
 
