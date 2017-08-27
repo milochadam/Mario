@@ -41,4 +41,5 @@ private:
     SDL_Texture* loadTexture( std::string path );
     void freeSurface( SDL_Surface* );
     void stretch( SDL_Surface* );
+    void example_08();
 };
