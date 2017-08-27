@@ -102,12 +102,13 @@ int Cmain::main(){
 		/**
 		 *  08 - Tutorial test
 		 */
-		example_08();
+		//example_08();
+		example_09();
 
 		/**
 		 * Jeszcze sprzed renderera
 		 */
-		// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
+		// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL 332);
 		// SDL_UpdateWindowSurface( window );
 	}
 
@@ -301,4 +302,49 @@ void Cmain::example_08() {
 
 		//Update screen
 		SDL_RenderPresent( renderer );
+}
+void Cmain::example_09() {
+	//Clear screen
+	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear( renderer );
+
+	//Top left corner viewport
+	SDL_Rect topLeftViewport;
+	topLeftViewport.x = 0;
+	topLeftViewport.y = 0;
+	topLeftViewport.w = SCREEN_WIDTH / 2;
+	topLeftViewport.h = SCREEN_HEIGHT / 2;
+	SDL_RenderSetViewport( renderer, &topLeftViewport );
+	
+	//Render texture to screen
+	SDL_RenderCopy( renderer, texture, NULL, NULL );
+
+
+	//Top right viewport
+	SDL_Rect topRightViewport;
+	topRightViewport.x = SCREEN_WIDTH / 2;
+	topRightViewport.y = 0;
+	topRightViewport.w = SCREEN_WIDTH / 2;
+	topRightViewport.h = SCREEN_HEIGHT / 2;
+	SDL_RenderSetViewport( renderer, &topRightViewport );
+	
+	//Render texture to screen
+	SDL_RenderCopy( renderer, texture, NULL, NULL );
+
+
+	//Bottom viewport
+	SDL_Rect bottomViewport;
+	bottomViewport.x = 0;
+	bottomViewport.y = SCREEN_HEIGHT / 2;
+	bottomViewport.w = SCREEN_WIDTH;
+	bottomViewport.h = SCREEN_HEIGHT / 2;
+	SDL_RenderSetViewport( renderer, &bottomViewport );
+
+	
+	//Render texture to screen
+	SDL_RenderCopy( renderer, texture, NULL, NULL );
+
+
+	//Update screen
+	SDL_RenderPresent( renderer );
 }
