@@ -13,6 +13,12 @@ private:
     SDL_Surface* currentSurface;
     SDL_Surface* pngSurface;
 
+    //The window renderer
+    SDL_Renderer* renderer;
+
+    //Current displayed texture
+    SDL_Texture* texture;
+
     SDL_Event e;
     enum KeyPressSurfaces {
         KB_DEFAULT,
@@ -31,7 +37,8 @@ public:
     int main();
     
 private:
-    SDL_Surface* loadSurface(std::string path);
-    void freeSurface(SDL_Surface* );
-    void stretch(SDL_Surface* );
+    SDL_Surface* loadSurface( std::string path );
+    SDL_Texture* loadTexture( std::string path );
+    void freeSurface( SDL_Surface* );
+    void stretch( SDL_Surface* );
 };

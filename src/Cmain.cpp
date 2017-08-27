@@ -9,16 +9,38 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 	currentSurface=NULL;
 	pngSurface=NULL;
 
+	renderer=NULL;
+	texture=NULL;
+
 	for(int i=0;i<KB_TOTAL;i++) {
 		kbSurfaces[i]=NULL;
 	}
 }
 
 Cmain::~Cmain(){
+	// Prawdopodobnie niepotrzebne zwalnianie, bo screenSurface to tylko wskaźnik na jeden z wczytanych obrazków
+	//freeSurface(screenSurface);
+
 	freeSurface(helloWorld);
 	freeSurface(exitImage);
-	
+	freeSurface(pngSurface);
+
+	for(int i=0;i<KB_TOTAL;i++) {
+		freeSurface( kbSurfaces[i] );
+	}
+
+	//Free loaded image
+	SDL_DestroyTexture( texture );
+	texture = NULL;
+
+	//Destroy window	
+	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
+	window = NULL;
+	renderer = NULL;
+
+	//Quit SDL subsystems
+	IMG_Quit();
     SDL_Quit();
 }
 
@@ -73,8 +95,20 @@ int Cmain::main(){
 				}
 			}
 		}
-		SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
-		SDL_UpdateWindowSurface( window );
+		//Clear screen
+		SDL_RenderClear( renderer );
+
+		//Render texture to screen
+		SDL_RenderCopy( renderer, texture, NULL, NULL );
+
+		//Update screen
+		SDL_RenderPresent( renderer );
+
+		/**
+		 * Jeszcze sprzed renderera
+		 */
+		// SDL_BlitSurface( currentSurface, NULL, screenSurface, NULL );
+		// SDL_UpdateWindowSurface( window );
 	}
 
 
@@ -91,12 +125,25 @@ bool Cmain::init(){
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		return false;
 	}
+
+	if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ) {
+		printf( "Warning: Linear texture filtering not enabled!" );
+	}
+
 	window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 	if( window == NULL ) {
 		printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		return false;
 	}
-	
+
+	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+	if( renderer == NULL ) {
+		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+		return false;
+	}
+	//Initialize renderer color
+	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
 	if( !( IMG_Init( imgFlags ) & imgFlags ) ) {
@@ -164,6 +211,13 @@ bool Cmain::loadMedia() {
 		success = false;
 	}
 
+	//Load PNG texture
+	texture = loadTexture( "../../res/texture.png" );
+	if( texture == NULL ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
+
 	return success;
 }
 
@@ -188,6 +242,27 @@ SDL_Surface* Cmain::loadSurface( std::string path ) {
 
 	SDL_FreeSurface( loadedSurface );
 	return optimizedSurface;
+}
+
+SDL_Texture* Cmain::loadTexture( std::string path ) {
+	//The final texture
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+	if( loadedSurface == NULL ) {
+		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		return NULL;
+	}
+	//Create texture from surface pixels
+	newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+	SDL_FreeSurface( loadedSurface );
+
+	if( newTexture == NULL ) {
+		printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+
+	return newTexture;
 }
 
 void Cmain::stretch(SDL_Surface* s) {
