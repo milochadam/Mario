@@ -1,3 +1,6 @@
+#ifndef LTEXTURE_H
+#define LTEXTURE_H
+
 #include <SDL2/SDL.h>
 #include <string>
 class LTexture
@@ -20,3 +23,4 @@ class LTexture
 		int mWidth;
 		int mHeight;
 };
+#endif //LTEXTURE_H
