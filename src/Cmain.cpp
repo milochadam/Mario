@@ -1,5 +1,6 @@
 #include "../include/Cmain.h"
 #include <iostream>
+#include "../include/LTexture.h"
 Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
     window = NULL;
 	screenSurface = NULL;
@@ -42,6 +43,7 @@ Cmain::~Cmain(){
 }
 
 int Cmain::main(){
+	int posx=240,posy=190;
     if( !init() ) {
 		printf( "Failed to initialize!\n" );
 		return 0;
@@ -58,13 +60,10 @@ int Cmain::main(){
 	currentSurface=kbSurfaces[KB_DEFAULT];
 
 	while( !quit ) {
-		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 ) {
-			//User requests quit
 			if( e.type == SDL_QUIT ) {
 				quit = true;
 			} else if( e.type == SDL_KEYDOWN ) {
-				//Select surfaces based on key press
 				switch( e.key.keysym.sym ) {
 					case SDLK_UP:
 					currentSurface = kbSurfaces[ KB_UP ];
@@ -76,10 +75,12 @@ int Cmain::main(){
 
 					case SDLK_LEFT:
 					currentSurface = kbSurfaces[ KB_LEFT ];
+					posx-=2;
 					break;
 
 					case SDLK_RIGHT:
 					currentSurface = kbSurfaces[ KB_RIGHT ];
+					posx+=2;
 					break;
 
 					case SDLK_p:
@@ -92,7 +93,20 @@ int Cmain::main(){
 				}
 			}
 		}
-		example_09();
+		//example_09();
+
+		//Clear screen
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear( renderer );
+
+		//Render background texture to screen
+		bgTexture->render( 0, 0 );
+
+		//Render Foo' to the screen
+		fooTexture->render( posx, posy );
+
+		//Update screen
+		SDL_RenderPresent( renderer );
 	}
 
 
@@ -154,7 +168,6 @@ bool Cmain::loadMedia() {
 		printf( "Failed to load exitImage image!\n" );
 		success = false;
 	}
-	//TODO: png surface
 	pngSurface = loadSurface( "../../res/loaded.png" );
 	if( exitImage == NULL ) {
 		printf( "Failed to load png image!\n" );
@@ -201,6 +214,18 @@ bool Cmain::loadMedia() {
 		printf( "Failed to load texture image!\n" );
 		success = false;
 	}
+
+	fooTexture = new LTexture(renderer);
+	if( !fooTexture->loadFromFile("../../res/foo.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
+	bgTexture = new LTexture(renderer);
+	if( !bgTexture->loadFromFile("../../res/background.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
+
 
 	return success;
 }

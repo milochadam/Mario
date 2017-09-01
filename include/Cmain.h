@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include "../include/LTexture.h"
 class Cmain {
 private:
     const int SCREEN_WIDTH;
@@ -18,6 +19,10 @@ private:
 
     //Current displayed texture
     SDL_Texture* texture;
+
+    // foo, bg
+    LTexture* fooTexture;
+    LTexture* bgTexture;
 
     SDL_Event e;
     enum KeyPressSurfaces {
