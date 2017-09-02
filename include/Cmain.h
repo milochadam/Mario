@@ -25,6 +25,8 @@ private:
     LTexture* bgTexture;
     LTexture* spriteSheetTexture;
     SDL_Rect spriteClips[ 4 ];
+    LTexture* modulatedTexture;
+    LTexture* backgroundTexture;
 
     SDL_Event e;
     enum KeyPressSurfaces {

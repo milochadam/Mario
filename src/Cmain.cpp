@@ -45,6 +45,7 @@ Cmain::~Cmain(){
 int Cmain::main(){
 	
 	int posx=240,posy=190;
+	Uint8 a = 255;
     if( !init() ) {
 		printf( "Failed to initialize!\n" );
 		return 0;
@@ -65,49 +66,49 @@ int Cmain::main(){
 			if( e.type == SDL_QUIT ) {
 				quit = true;
 			} else if( e.type == SDL_KEYDOWN ) {
-				switch( e.key.keysym.sym ) {
-					case SDLK_UP:
-					posy-=5;
-					break;
-
-					case SDLK_DOWN:
-					posy+=5;
-					break;
-
-					case SDLK_LEFT:
-					posx-=5;
-					break;
-
-					case SDLK_RIGHT:
-					posx+=5;
-					break;
-
-					case SDLK_p:
-					break;
-
-					default:
-					break;
+				//Increase alpha on w
+				if( e.key.keysym.sym == SDLK_w )
+				{
+					//Cap if over 255
+					if( a + 32 > 255 )
+					{
+						a = 255;
+					}
+					//Increment otherwise
+					else
+					{
+						a += 32;
+					}
+				}
+				//Decrease alpha on s
+				else if( e.key.keysym.sym == SDLK_s )
+				{
+					//Cap if below 0
+					if( a - 32 < 0 )
+					{
+						a = 0;
+					}
+					//Decrement otherwise
+					else
+					{
+						a -= 32;
+					}
 				}
 			}
 		}
-		//Clear screen
-		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-		SDL_RenderClear( renderer );
+		 //Clear screen
+		 SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		 SDL_RenderClear( renderer );
 
-		//Render top left sprite
-		spriteSheetTexture->render( 0, 0, &spriteClips[ 0 ] );
+		 //Render background
+		 backgroundTexture->render( 0, 0 );
 
-		//Render top right sprite
-		spriteSheetTexture->render( SCREEN_WIDTH - spriteClips[ 1 ].w, 0, &spriteClips[ 1 ] );
+		 //Render front blended
+		 modulatedTexture->setAlpha( a );
+		 modulatedTexture->render( 0, 0 );
 
-		//Render bottom left sprite
-		spriteSheetTexture->render( 0, SCREEN_HEIGHT - spriteClips[ 2 ].h, &spriteClips[ 2 ] );
-
-		//Render bottom right sprite
-		spriteSheetTexture->render( SCREEN_WIDTH - spriteClips[ 3 ].w, SCREEN_HEIGHT - spriteClips[ 3 ].h, &spriteClips[ 3 ] );
-
-		//Update screen
-		SDL_RenderPresent( renderer );
+		 //Update screen
+		 SDL_RenderPresent( renderer );
 	}
 
 
@@ -231,6 +232,9 @@ bool Cmain::loadMedia() {
 		printf( "Failed to load texture image!\n" );
 		success = false;
 	} else {
+		int img_width=200;
+		int img_height=200;
+		for(int i=0;i<img_width;i+=img_width/2)
         spriteClips[ 0 ].x =   0;
         spriteClips[ 0 ].y =   0;
         spriteClips[ 0 ].w = 100;
@@ -251,7 +255,18 @@ bool Cmain::loadMedia() {
         spriteClips[ 3 ].w = 100;
         spriteClips[ 3 ].h = 100;
 	}
-
+	modulatedTexture = new LTexture(renderer);
+	if( !modulatedTexture->loadFromFile("../../res/fadein.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}else {
+        modulatedTexture->setBlendMode( SDL_BLENDMODE_BLEND );
+	}
+	backgroundTexture = new LTexture(renderer);
+	if( !backgroundTexture->loadFromFile("../../res/fadeout.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
 
 	return success;
 }
