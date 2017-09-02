@@ -62,6 +62,9 @@ void LTexture::free() {
 		mHeight = 0;
 	}
 }
+void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue ) {
+    SDL_SetTextureColorMod( mTexture, red, green, blue );
+}
 
 void LTexture::render( int x, int y, SDL_Rect* clip ) {
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
