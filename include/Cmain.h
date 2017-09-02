@@ -9,10 +9,6 @@ private:
     SDL_Window* window;
     SDL_Surface* screenSurface;
 
-    SDL_Surface* helloWorld;
-    SDL_Surface* exitImage;
-    SDL_Surface* currentSurface;
-    SDL_Surface* pngSurface;
 
     //The window renderer
     SDL_Renderer* renderer;

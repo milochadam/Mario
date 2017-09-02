@@ -5,11 +5,6 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
     window = NULL;
 	screenSurface = NULL;
 	
-	helloWorld=NULL;
-	exitImage=NULL;
-	currentSurface=NULL;
-	pngSurface=NULL;
-
 	renderer=NULL;
 	texture=NULL;
 
@@ -19,9 +14,6 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
 }
 
 Cmain::~Cmain(){
-	freeSurface(helloWorld);
-	freeSurface(exitImage);
-	freeSurface(pngSurface);
 
 	for(int i=0;i<KB_TOTAL;i++) {
 		freeSurface( kbSurfaces[i] );
@@ -59,7 +51,6 @@ int Cmain::main(){
 	
 	bool quit = false;
 
-	currentSurface=kbSurfaces[KB_DEFAULT];
 
 	while( !quit ) {
 		while( SDL_PollEvent( &e ) != 0 ) {
@@ -160,21 +151,7 @@ bool Cmain::init(){
 bool Cmain::loadMedia() {
 	bool success = true;
 
-	helloWorld = loadSurface( "../../res/hello_world.bmp" );
-	if( helloWorld == NULL ) {
-		printf( "Failed to load helloWorld image!\n" );
-		success = false;
-	}
-	exitImage = loadSurface( "../../res/x.bmp" );
-	if( exitImage == NULL ) {
-		printf( "Failed to load exitImage image!\n" );
-		success = false;
-	}
-	pngSurface = loadSurface( "../../res/loaded.png" );
-	if( exitImage == NULL ) {
-		printf( "Failed to load png image!\n" );
-		success = false;
-	}
+	
 	//Load default surface
 	kbSurfaces[ KB_DEFAULT ] = loadSurface( "../../res/press.bmp" );
 	if( kbSurfaces[ KB_DEFAULT ] == NULL ) {
