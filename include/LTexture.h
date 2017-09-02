@@ -3,8 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <string>
-class LTexture
-{
+class LTexture {
 	public:
         LTexture();
         LTexture(SDL_Renderer* s);
@@ -12,7 +11,7 @@ class LTexture
 
 		bool loadFromFile( std::string path );
 		void free();
-		void render( int x, int y );
+		void render( int x, int y, SDL_Rect* clip = NULL );
 
 		int getWidth();
 		int getHeight();

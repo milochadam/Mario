@@ -23,6 +23,8 @@ private:
     // foo, bg
     LTexture* fooTexture;
     LTexture* bgTexture;
+    LTexture* spriteSheetTexture;
+    SDL_Rect spriteClips[ 4 ];
 
     SDL_Event e;
     enum KeyPressSurfaces {

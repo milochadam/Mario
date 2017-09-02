@@ -43,6 +43,7 @@ Cmain::~Cmain(){
 }
 
 int Cmain::main(){
+	
 	int posx=240,posy=190;
     if( !init() ) {
 		printf( "Failed to initialize!\n" );
@@ -66,44 +67,44 @@ int Cmain::main(){
 			} else if( e.type == SDL_KEYDOWN ) {
 				switch( e.key.keysym.sym ) {
 					case SDLK_UP:
-					currentSurface = kbSurfaces[ KB_UP ];
+					posy-=5;
 					break;
 
 					case SDLK_DOWN:
-					currentSurface = kbSurfaces[ KB_DOWN ];
+					posy+=5;
 					break;
 
 					case SDLK_LEFT:
-					currentSurface = kbSurfaces[ KB_LEFT ];
-					posx-=2;
+					posx-=5;
 					break;
 
 					case SDLK_RIGHT:
-					currentSurface = kbSurfaces[ KB_RIGHT ];
-					posx+=2;
+					posx+=5;
 					break;
 
 					case SDLK_p:
-					currentSurface = pngSurface;
 					break;
 
 					default:
-					currentSurface = kbSurfaces[ KB_DEFAULT ];
 					break;
 				}
 			}
 		}
-		//example_09();
-
 		//Clear screen
 		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear( renderer );
 
-		//Render background texture to screen
-		bgTexture->render( 0, 0 );
+		//Render top left sprite
+		spriteSheetTexture->render( 0, 0, &spriteClips[ 0 ] );
 
-		//Render Foo' to the screen
-		fooTexture->render( posx, posy );
+		//Render top right sprite
+		spriteSheetTexture->render( SCREEN_WIDTH - spriteClips[ 1 ].w, 0, &spriteClips[ 1 ] );
+
+		//Render bottom left sprite
+		spriteSheetTexture->render( 0, SCREEN_HEIGHT - spriteClips[ 2 ].h, &spriteClips[ 2 ] );
+
+		//Render bottom right sprite
+		spriteSheetTexture->render( SCREEN_WIDTH - spriteClips[ 3 ].w, SCREEN_HEIGHT - spriteClips[ 3 ].h, &spriteClips[ 3 ] );
 
 		//Update screen
 		SDL_RenderPresent( renderer );
@@ -224,6 +225,31 @@ bool Cmain::loadMedia() {
 	if( !bgTexture->loadFromFile("../../res/background.png") ) {
 		printf( "Failed to load texture image!\n" );
 		success = false;
+	}
+	spriteSheetTexture = new LTexture(renderer);
+	if( !spriteSheetTexture->loadFromFile("../../res/dots.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	} else {
+        spriteClips[ 0 ].x =   0;
+        spriteClips[ 0 ].y =   0;
+        spriteClips[ 0 ].w = 100;
+		spriteClips[ 0 ].h = 100;
+		
+        spriteClips[ 1 ].x = 100;
+        spriteClips[ 1 ].y =   0;
+        spriteClips[ 1 ].w = 100;
+		spriteClips[ 1 ].h = 100;
+		
+        spriteClips[ 2 ].x =   0;
+        spriteClips[ 2 ].y = 100;
+        spriteClips[ 2 ].w = 100;
+		spriteClips[ 2 ].h = 100;
+		
+        spriteClips[ 3 ].x = 100;
+        spriteClips[ 3 ].y = 100;
+        spriteClips[ 3 ].w = 100;
+        spriteClips[ 3 ].h = 100;
 	}
 
 

@@ -63,10 +63,13 @@ void LTexture::free() {
 	}
 }
 
-void LTexture::render( int x, int y ) {
-	//Set rendering space and render to screen
+void LTexture::render( int x, int y, SDL_Rect* clip ) {
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-	SDL_RenderCopy( renderer, mTexture, NULL, &renderQuad );
+	if( clip != NULL ) {
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+	SDL_RenderCopy( renderer, mTexture, clip, &renderQuad );
 }
 
 int LTexture::getWidth() {
