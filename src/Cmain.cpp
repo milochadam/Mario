@@ -211,26 +211,16 @@ bool Cmain::loadMedia() {
 	} else {
 		int img_width=200;
 		int img_height=200;
-		for(int i=0;i<img_width;i+=img_width/2)
-        spriteClips[ 0 ].x =   0;
-        spriteClips[ 0 ].y =   0;
-        spriteClips[ 0 ].w = 100;
-		spriteClips[ 0 ].h = 100;
-		
-        spriteClips[ 1 ].x = 100;
-        spriteClips[ 1 ].y =   0;
-        spriteClips[ 1 ].w = 100;
-		spriteClips[ 1 ].h = 100;
-		
-        spriteClips[ 2 ].x =   0;
-        spriteClips[ 2 ].y = 100;
-        spriteClips[ 2 ].w = 100;
-		spriteClips[ 2 ].h = 100;
-		
-        spriteClips[ 3 ].x = 100;
-        spriteClips[ 3 ].y = 100;
-        spriteClips[ 3 ].w = 100;
-        spriteClips[ 3 ].h = 100;
+		int img_w_p=img_width/2;
+		int img_h_p=img_height/2;
+		int count=0;
+		for(int j=0;j<img_height;j+=img_h_p)
+			for(int i=0;i<img_width;i+=img_w_p,count++) {
+				spriteClips[ count ].x =   i;
+				spriteClips[ count ].y =   j;
+				spriteClips[ count ].w = img_w_p;
+				spriteClips[ count ].h = img_h_p;
+			}
 	}
 	modulatedTexture = new LTexture(renderer);
 	if( !modulatedTexture->loadFromFile("../../res/fadein.png") ) {
