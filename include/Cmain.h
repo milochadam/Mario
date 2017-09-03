@@ -6,6 +6,10 @@ class Cmain {
 private:
     const int SCREEN_WIDTH;
     const int SCREEN_HEIGHT;
+
+    int frame;
+    const int WALKING_ANIMATION_FRAMES;
+
     SDL_Window* window;
     SDL_Surface* screenSurface;
 
@@ -40,6 +44,8 @@ public:
     bool init();
     bool loadMedia();
     int main();
+    void clear();
+    void updateScreen();
     
 private:
     SDL_Surface* loadSurface( std::string path );

@@ -1,10 +1,13 @@
 #include "../include/Cmain.h"
 #include <iostream>
 #include "../include/LTexture.h"
-Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480) {
+Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480), WALKING_ANIMATION_FRAMES(4) {
+
     window = NULL;
 	screenSurface = NULL;
-	
+
+	frame=0;
+
 	renderer=NULL;
 	texture=NULL;
 
@@ -36,9 +39,7 @@ Cmain::~Cmain(){
 
 int Cmain::main(){
 	
-	int posx=240,posy=190;
-	Uint8 a = 255;
-	int frame=0;
+	
 	const int WALKING_ANIMATION_FRAMES = 4;
 
     if( !init() ) {
@@ -63,27 +64,29 @@ int Cmain::main(){
 				
 			}
 		}
-		//Clear screen
-		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-		SDL_RenderClear( renderer );
-
-		SDL_Rect* currentClip = &spriteClips[ frame / 4 ];
-		spriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
-
-		//Update screen
-		SDL_RenderPresent( renderer );
-
-		//Go to next frame
-		++frame;
-
-		//Cycle animation
-		if( frame / 4 >= WALKING_ANIMATION_FRAMES )
-		{
-			frame = 0;
-		}
+		clear();
+		updateScreen();
 	}
 
 
+}
+
+void Cmain::updateScreen(){
+
+
+	SDL_Rect* currentClip = &spriteClips[ frame / 4 ];
+	spriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
+
+	//Update screen
+	SDL_RenderPresent( renderer );
+
+	//Go to next frame
+	++frame;
+
+	//Cycle animation
+	if( frame / 4 >= WALKING_ANIMATION_FRAMES ) {
+		frame = 0;
+	}
 }
 
 bool Cmain::init(){
@@ -345,4 +348,9 @@ void Cmain::example_09() {
 
 	//Update screen
 	SDL_RenderPresent( renderer );
+}
+
+void Cmain::clear(){
+	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear( renderer );
 }
