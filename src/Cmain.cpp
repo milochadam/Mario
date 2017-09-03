@@ -38,6 +38,9 @@ int Cmain::main(){
 	
 	int posx=240,posy=190;
 	Uint8 a = 255;
+	int frame=0;
+	const int WALKING_ANIMATION_FRAMES = 4;
+
     if( !init() ) {
 		printf( "Failed to initialize!\n" );
 		return 0;
@@ -57,49 +60,27 @@ int Cmain::main(){
 			if( e.type == SDL_QUIT ) {
 				quit = true;
 			} else if( e.type == SDL_KEYDOWN ) {
-				//Increase alpha on w
-				if( e.key.keysym.sym == SDLK_w )
-				{
-					//Cap if over 255
-					if( a + 32 > 255 )
-					{
-						a = 255;
-					}
-					//Increment otherwise
-					else
-					{
-						a += 32;
-					}
-				}
-				//Decrease alpha on s
-				else if( e.key.keysym.sym == SDLK_s )
-				{
-					//Cap if below 0
-					if( a - 32 < 0 )
-					{
-						a = 0;
-					}
-					//Decrement otherwise
-					else
-					{
-						a -= 32;
-					}
-				}
+				
 			}
 		}
-		 //Clear screen
-		 SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-		 SDL_RenderClear( renderer );
+		//Clear screen
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear( renderer );
 
-		 //Render background
-		 backgroundTexture->render( 0, 0 );
+		SDL_Rect* currentClip = &spriteClips[ frame / 4 ];
+		spriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
 
-		 //Render front blended
-		 modulatedTexture->setAlpha( a );
-		 modulatedTexture->render( 0, 0 );
+		//Update screen
+		SDL_RenderPresent( renderer );
 
-		 //Update screen
-		 SDL_RenderPresent( renderer );
+		//Go to next frame
+		++frame;
+
+		//Cycle animation
+		if( frame / 4 >= WALKING_ANIMATION_FRAMES )
+		{
+			frame = 0;
+		}
 	}
 
 
@@ -127,7 +108,7 @@ bool Cmain::init(){
 		return false;
 	}
 
-	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if( renderer == NULL ) {
 		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;
@@ -205,14 +186,14 @@ bool Cmain::loadMedia() {
 		success = false;
 	}
 	spriteSheetTexture = new LTexture(renderer);
-	if( !spriteSheetTexture->loadFromFile("../../res/dots.png") ) {
+	if( !spriteSheetTexture->loadFromFile("../../res/foo_animated.png") ) {
 		printf( "Failed to load texture image!\n" );
 		success = false;
 	} else {
-		int img_width=200;
-		int img_height=200;
-		int img_w_p=img_width/2;
-		int img_h_p=img_height/2;
+		int img_width=256;
+		int img_height=205;
+		int img_w_p=img_width/4;
+		int img_h_p=img_height;
 		int count=0;
 		for(int j=0;j<img_height;j+=img_h_p)
 			for(int i=0;i<img_width;i+=img_w_p,count++) {
@@ -221,6 +202,7 @@ bool Cmain::loadMedia() {
 				spriteClips[ count ].w = img_w_p;
 				spriteClips[ count ].h = img_h_p;
 			}
+
 	}
 	modulatedTexture = new LTexture(renderer);
 	if( !modulatedTexture->loadFromFile("../../res/fadein.png") ) {
