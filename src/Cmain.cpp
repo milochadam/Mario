@@ -7,6 +7,8 @@ Cmain::Cmain() : SCREEN_WIDTH(640), SCREEN_HEIGHT(480), WALKING_ANIMATION_FRAMES
 	screenSurface = NULL;
 
 	frame=0;
+	degrees=0;
+	flipType=SDL_FLIP_NONE;
 
 	renderer=NULL;
 	texture=NULL;
@@ -61,7 +63,28 @@ int Cmain::main(){
 			if( e.type == SDL_QUIT ) {
 				quit = true;
 			} else if( e.type == SDL_KEYDOWN ) {
-				
+				switch( e.key.keysym.sym )
+				{
+					case SDLK_a:
+					degrees -= 60;
+					break;
+					
+					case SDLK_d:
+					degrees += 60;
+					break;
+
+					case SDLK_q:
+					flipType = SDL_FLIP_HORIZONTAL;
+					break;
+
+					case SDLK_w:
+					flipType = SDL_FLIP_NONE;
+					break;
+
+					case SDLK_e:
+					flipType = SDL_FLIP_VERTICAL;
+					break;
+				}
 			}
 		}
 		clear();
@@ -72,21 +95,11 @@ int Cmain::main(){
 }
 
 void Cmain::updateScreen(){
-
-
-	SDL_Rect* currentClip = &spriteClips[ frame / 4 ];
-	spriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
+	//Render arrow
+	arrowTexture->render( ( SCREEN_WIDTH - arrowTexture->getWidth() ) / 2, ( SCREEN_HEIGHT - arrowTexture->getHeight() ) / 2, NULL, degrees, NULL, flipType );
 
 	//Update screen
 	SDL_RenderPresent( renderer );
-
-	//Go to next frame
-	++frame;
-
-	//Cycle animation
-	if( frame / 4 >= WALKING_ANIMATION_FRAMES ) {
-		frame = 0;
-	}
 }
 
 bool Cmain::init(){
@@ -216,6 +229,11 @@ bool Cmain::loadMedia() {
 	}
 	backgroundTexture = new LTexture(renderer);
 	if( !backgroundTexture->loadFromFile("../../res/fadeout.png") ) {
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
+	arrowTexture = new LTexture(renderer);
+	if( !arrowTexture->loadFromFile("../../res/arrow.png") ) {
 		printf( "Failed to load texture image!\n" );
 		success = false;
 	}

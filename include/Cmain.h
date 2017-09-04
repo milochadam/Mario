@@ -27,6 +27,7 @@ private:
     SDL_Rect spriteClips[ 4 ];
     LTexture* modulatedTexture;
     LTexture* backgroundTexture;
+    LTexture* arrowTexture;
 
     SDL_Event e;
     enum KeyPressSurfaces {
@@ -38,6 +39,13 @@ private:
         KB_TOTAL
     };
     SDL_Surface* kbSurfaces[KB_TOTAL];
+
+    ///
+    //Angle of rotation
+    double degrees;
+    
+    //Flip type
+    SDL_RendererFlip flipType;
 public:
     Cmain();
     ~Cmain();
